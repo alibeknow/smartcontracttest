@@ -10,165 +10,165 @@ spec:
   owner: guests
   definition:
    $text: |
-  openapi: 3.0.0
-  paths:
-    "/v2.0/lookup":
-      get:
-        operationId: ApiV2Controller_lookup
-        summary: Returns domains for address if existed
-        parameters:
-        - name: name
-          required: true
-          in: query
-          description: domain
-          example: vitalik.eth
-          schema:
-            type: string
-        responses:
-          '200':
-            description: ''
+    openapi: 3.0.0
+     paths:
+      "/v2.0/lookup":
+        get:
+          operationId: ApiV2Controller_lookup
+          summary: Returns domains for address if existed
+          parameters:
+          - name: name
+            required: true
+            in: query
+            description: domain
+            example: vitalik.eth
+            schema:
+              type: string
+          responses:
+            '200':
+              description: ''
+              content:
+                application/json:
+                  schema:
+                    "$ref": "#/components/schemas/ResponseV2Dto"
+      "/v2.0/reverse-lookup":
+        get:
+          operationId: ApiV2Controller_reverseLookup
+          summary: Returns domain for address if existed
+          parameters:
+          - name: address
+            required: true
+            in: query
+            description: address
+            example: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+            schema:
+              type: string
+          responses:
+            '200':
+              description: ''
+              content:
+                application/json:
+                  schema:
+                    "$ref": "#/components/schemas/ResponseReverseV2Dto"
+      "/v2.0/reverse-lookup-batch":
+        post:
+          operationId: ApiV2Controller_reverseLookupBatch
+          summary: Returns domain for addresses if existed
+          parameters: []
+          requestBody:
+            required: true
             content:
               application/json:
                 schema:
-                  "$ref": "#/components/schemas/ResponseV2Dto"
-    "/v2.0/reverse-lookup":
-      get:
-        operationId: ApiV2Controller_reverseLookup
-        summary: Returns domain for address if existed
-        parameters:
-        - name: address
-          required: true
-          in: query
-          description: address
-          example: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-          schema:
-            type: string
-        responses:
-          '200':
-            description: ''
-            content:
-              application/json:
-                schema:
-                  "$ref": "#/components/schemas/ResponseReverseV2Dto"
-    "/v2.0/reverse-lookup-batch":
-      post:
-        operationId: ApiV2Controller_reverseLookupBatch
-        summary: Returns domain for addresses if existed
-        parameters: []
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-        responses:
-          '200':
-            description: ''
-            content:
-              application/json:
-                schema:
-                  "$ref": "#/components/schemas/ResponseBatchV2ReturnTypeDto"
-          '404':
-            description: ''
-    "/v2.0/get-providers-data-with-avatar":
-      get:
-        operationId: ApiV2Controller_getAvatar
-        summary: Returns list of provider data with avatar
-        parameters:
-        - name: addressOrDomain
-          required: true
-          in: query
-          schema:
-            type: string
-        responses:
-          '200':
-            description: ''
-            content:
-              application/json:
-                schema:
-                  "$ref": "#/components/schemas/AvatarsResponse"
-  info:
-    title: domains
-    description: domains
-    version: '2.0'
-    contact: {}
-  tags: []
-  servers: []
-  components:
-    schemas:
-      ProviderResponse:
-        type: object
-        properties:
-          protocol:
-            type: string
-          address:
-            type: string
-          checkUrl:
-            type: string
-        required:
-        - protocol
-        - address
-        - checkUrl
-      ResponseV2Dto:
-        type: object
-        properties:
-          result:
-            "$ref": "#/components/schemas/ProviderResponse"
-        required:
-        - result
-      ProviderReverseResponse:
-        type: object
-        properties:
-          protocol:
-            type: string
-          domain:
-            type: string
-          checkUrl:
-            type: string
-        required:
-        - protocol
-        - domain
-        - checkUrl
-      ResponseReverseV2Dto:
-        type: object
-        properties:
-          result:
-            "$ref": "#/components/schemas/ProviderReverseResponse"
-        required:
-        - result
-      ResponseBatchV2ReturnTypeDto:
-        type: object
-        properties:
-          '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045':
-            description: return request address as key
-            type: array
-            items:
+                  type: array
+                  items:
+                    type: string
+          responses:
+            '200':
+              description: ''
+              content:
+                application/json:
+                  schema:
+                    "$ref": "#/components/schemas/ResponseBatchV2ReturnTypeDto"
+            '404':
+              description: ''
+      "/v2.0/get-providers-data-with-avatar":
+        get:
+          operationId: ApiV2Controller_getAvatar
+          summary: Returns list of provider data with avatar
+          parameters:
+          - name: addressOrDomain
+            required: true
+            in: query
+            schema:
+              type: string
+          responses:
+            '200':
+              description: ''
+              content:
+                application/json:
+                  schema:
+                    "$ref": "#/components/schemas/AvatarsResponse"
+    info:
+      title: domains
+      description: domains
+      version: '2.0'
+      contact: {}
+    tags: []
+    servers: []
+    components:
+      schemas:
+        ProviderResponse:
+          type: object
+          properties:
+            protocol:
+              type: string
+            address:
+              type: string
+            checkUrl:
+              type: string
+          required:
+          - protocol
+          - address
+          - checkUrl
+        ResponseV2Dto:
+          type: object
+          properties:
+            result:
+              "$ref": "#/components/schemas/ProviderResponse"
+          required:
+          - result
+        ProviderReverseResponse:
+          type: object
+          properties:
+            protocol:
+              type: string
+            domain:
+              type: string
+            checkUrl:
+              type: string
+          required:
+          - protocol
+          - domain
+          - checkUrl
+        ResponseReverseV2Dto:
+          type: object
+          properties:
+            result:
               "$ref": "#/components/schemas/ProviderReverseResponse"
-        required:
-        - '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
-      ProviderResponseWithAvatar:
-        type: object
-        properties:
-          protocol:
-            type: string
-          domain:
-            type: string
-          address:
-            type: string
-          avatar:
-            type: object
-            nullable: true
-        required:
-        - protocol
-        - domain
-        - address
-        - avatar
-      AvatarsResponse:
-        type: object
-        properties:
-          result:
-            "$ref": "#/components/schemas/ProviderResponseWithAvatar"
-        required:
-        - result
+          required:
+          - result
+        ResponseBatchV2ReturnTypeDto:
+          type: object
+          properties:
+            '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045':
+              description: return request address as key
+              type: array
+              items:
+                "$ref": "#/components/schemas/ProviderReverseResponse"
+          required:
+          - '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+        ProviderResponseWithAvatar:
+          type: object
+          properties:
+            protocol:
+              type: string
+            domain:
+              type: string
+            address:
+              type: string
+            avatar:
+              type: object
+              nullable: true
+          required:
+          - protocol
+          - domain
+          - address
+          - avatar
+        AvatarsResponse:
+          type: object
+          properties:
+            result:
+              "$ref": "#/components/schemas/ProviderResponseWithAvatar"
+          required:
+          - result
