@@ -13,9 +13,11 @@ const recipientAddress = '0xAb7A9d5f1139E67C04a9de00113eC64772547c7C';
 const provider = new ethers.JsonRpcProvider(
   'https://eth-sepolia.g.alchemy.com/v2/35cMnLxFYB6rgXLFG3zUPemouOiBWJ00',
 );
-
+const routerABI = [
+  'function execute(bytes calldata commands, bytes[] calldata inputs, uint256 deadline)',
+];
 const wallet = new ethers.Wallet(walletPrivateKey, provider);
-const contract = new ethers.Contract(universalRouterUni, contractABI, wallet);
+const contract = new ethers.Contract(universalRouterUni, routerABI, wallet);
 
 async function transfer() {
   const amount = ethers.parseUnits('1', 18);
@@ -31,10 +33,12 @@ async function transferFrom() {
 // Функция для декодирования inputs
 async function decodeInputs() {
   const abiCoder = new ethers.AbiCoder();
-  const pathSwap = abiCoder.encode(
+  const pathSwap = ethers.solidityPacked(
     ['address', 'uint24', 'address'],
     [chainLinkContract, 3000, contractAddressBccToken],
   );
+  console.log({ pathSwap });
+
   const params = ['address', 'uint256', 'uint256', 'bytes', 'bool'];
   const values = [walletAddress, '3000000000000000000', 0, pathSwap, true];
   const result = abiCoder.encode(params, values);
@@ -42,7 +46,11 @@ async function decodeInputs() {
 
   const commandsValues = '0x00';
 
-  const tx = await contract.execute(commandsValues, [result]);
+  const tx = await contract.execute(
+    commandsValues,
+    [result],
+    (Date.now() / 1000 + 60 * 20) | 0,
+  );
   console.log({ tx });
 }
 decodeInputs();
